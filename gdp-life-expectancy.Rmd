@@ -1,0 +1,56 @@
+---
+title: "GDP and life expectancy"
+output:
+  html_document:
+    fig_height: 3
+    fig_width: 6
+---
+
+```{r setup, echo=FALSE}
+# hide code and messages from output
+# set echo = TRUE to show code in output
+# set message = TRUE to show messages in output
+knitr::opts_chunk$set(echo = FALSE, message = FALSE)
+```
+
+```{r load-packages}
+library(ggplot2)
+library(dplyr)
+```
+
+```{r load-dataset}
+gapminder <- read.csv("data/gapminder.csv")
+```
+
+The Gapminder dataset contains life expectancy and GDP per capita information for countries between for the following years: `r unique(gapminder$year)`.
+
+```{r set-year}
+# change here for analysis for another year
+# make sure to choose a year for which there is data available
+analysis_year <- 2007
+```
+
+In this report we analyze the relationship between GDP and life expectancy in `r analysis_year` overall and by year.
+
+```{r filter-for-year}
+gap_subset <- gapminder %>%
+  filter(year == analysis_year)
+```
+
+The figure below shows the relationship between these variables in all countries that we have data for in `r analysis_year`.
+
+```{r overall}
+ggplot(data = gap_subset, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point() +
+  xlab("GDP per capita") +
+  ylab("Life expectancy")
+```
+
+It might also be of interest to visualize this relationship conditional on continent.
+
+```{r by-continent}
+ggplot(data = gap_subset, aes(x = gdpPercap, y = lifeExp, color = continent)) +
+  geom_point() +
+  xlab("GDP per capita") +
+  ylab("Life expectancy")
+```
